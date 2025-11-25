@@ -8,7 +8,7 @@ const Home = () => {
       <Header />
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="mb-12">
-          <h2 className="text-4xl font-light text-foreground mb-6">
+          <h2 className="text-4xl font-heading font-light text-foreground mb-6">
             Welcome to Space Travel Control Centre, <span className="font-medium">Group 1</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed max-w-4xl">
@@ -17,7 +17,7 @@ const Home = () => {
         </div>
 
         <div className="mb-8">
-          <h3 className="text-2xl font-light text-foreground mb-6">PENDING ACTION ITEMS</h3>
+          <h3 className="text-2xl font-heading font-light text-foreground mb-6">PENDING ACTION ITEMS</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

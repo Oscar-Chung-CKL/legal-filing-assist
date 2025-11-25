@@ -6,7 +6,7 @@ const Header = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Plane className="h-6 w-6 text-foreground" />
-          <h1 className="text-lg font-light text-foreground">Space Travel Control Centre</h1>
+          <h1 className="text-lg font-heading font-normal text-foreground">Space Travel Control Centre</h1>
         </div>
         <button className="flex items-center gap-2 text-foreground hover:text-muted-foreground transition-colors">
           <span className="font-medium">Group 1</span>

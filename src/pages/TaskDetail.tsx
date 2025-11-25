@@ -22,7 +22,7 @@ const TaskDetail = () => {
           <div className="flex items-center gap-4 mb-6">
             <PenLine className="h-10 w-10 text-foreground" />
             <div>
-              <h2 className="text-4xl font-light text-foreground">Urgent Legal Filings</h2>
+              <h2 className="text-4xl font-heading font-light text-foreground">Urgent Legal Filings</h2>
             </div>
             <span className="inline-block px-3 py-1 rounded-full text-xs font-medium uppercase bg-badge-easy text-badge-easy-foreground ml-4">
               EASY
