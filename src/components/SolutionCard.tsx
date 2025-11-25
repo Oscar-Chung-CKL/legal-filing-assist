@@ -15,7 +15,7 @@ const SolutionCard = ({ icon, title, description, cost, time, onSelect }: Soluti
   return (
     <div className="border border-border bg-card p-6 rounded-lg">
       <div className="mb-4 text-foreground">{icon}</div>
-      <h3 className="text-xl font-normal text-foreground mb-4">{title}</h3>
+      <h3 className="text-xl font-heading font-normal text-foreground mb-4">{title}</h3>
       <p className="text-muted-foreground leading-relaxed mb-6">{description}</p>
       
       <div className="flex items-center gap-6 mb-6">
