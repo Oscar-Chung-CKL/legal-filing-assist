@@ -12,22 +12,19 @@ serve(async (req) => {
 
   try {
     const { prompt } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
-    }
+    // Azure OpenAI Configuration
+    const AZURE_OPENAI_API_KEY = "8EIea3d4J69ERabJ3KoZIyQT4hiEriJ1iKAVPwJI6fHdhtV4zL2jJQQJ99BKACHYHv6XJ3w3AAABACOG5fm6";
+    const AZURE_ENDPOINT = "https://cpa-ct-for-kev-openai-east-us2.openai.azure.com/openai/deployments/gpt-5.1-chat/chat/completions?api-version=2024-12-01-preview";
 
     console.log('Generating solution for prompt:', prompt);
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetch(AZURE_ENDPOINT, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'api-key': AZURE_OPENAI_API_KEY,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
         messages: [
           { 
             role: 'system', 
@@ -35,13 +32,14 @@ serve(async (req) => {
           },
           { role: 'user', content: prompt }
         ],
+        max_tokens: 800 // Setting a reasonable limit for the response
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('AI gateway error:', response.status, errorText);
-      throw new Error(`AI gateway error: ${response.status}`);
+      console.error('Azure OpenAI API error:', response.status, errorText);
+      throw new Error(`Azure OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();

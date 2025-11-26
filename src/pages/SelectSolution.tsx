@@ -14,7 +14,6 @@ const SelectSolution = () => {
   const [showCopilotPrompt, setShowCopilotPrompt] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [aiResponse, setAiResponse] = useState("");
 
   const handleCopilotSelect = () => {
     setShowCopilotPrompt(true);
@@ -30,7 +29,6 @@ const SelectSolution = () => {
     }
 
     setIsGenerating(true);
-    setAiResponse("");
 
     try {
       const { data, error } = await supabase.functions.invoke('generate-solution', {
@@ -39,7 +37,11 @@ const SelectSolution = () => {
 
       if (error) throw error;
 
-      setAiResponse(data.solution);
+      // Navigate to the result page with the solution
+      navigate("/task/urgent-legal-filings/solution-result", { 
+        state: { solution: data.solution } 
+      });
+      
       toast({
         title: "Solution generated",
         description: "AI has generated a solution for your task",
@@ -137,15 +139,6 @@ const SelectSolution = () => {
                     disabled={isGenerating}
                   />
                 </div>
-
-                {aiResponse && (
-                  <div className="bg-secondary border border-border rounded-lg p-6 mb-6">
-                    <h4 className="text-lg font-heading font-normal text-foreground mb-3">AI Solution:</h4>
-                    <div className="text-foreground whitespace-pre-wrap leading-relaxed">
-                      {aiResponse}
-                    </div>
-                  </div>
-                )}
 
                 <Button
                   onClick={handleGenerate}
