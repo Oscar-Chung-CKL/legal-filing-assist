@@ -13,7 +13,7 @@ serve(async (req) => {
   try {
     const { prompt } = await req.json();
     // Azure OpenAI Configuration
-    const AZURE_OPENAI_API_KEY = "8EIea3d4J69ERabJ3KoZIyQT4hiEriJ1iKAVPwJI6fHdhtV4zL2jJQQJ99BKACHYHv6XJ3w3AAABACOG5fm6";
+    const AZURE_OPENAI_API_KEY = "OpenAIKeyHere";
     const AZURE_ENDPOINT = "https://cpa-ct-for-kev-openai-east-us2.openai.azure.com/openai/deployments/gpt-5.1-chat/chat/completions?api-version=2024-12-01-preview";
 
     console.log('Generating solution for prompt:', prompt);
