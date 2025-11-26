@@ -3,13 +3,57 @@ import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import SolutionCard from "@/components/SolutionCard";
 import { PenLine, Sparkles, FileText } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 const SelectSolution = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [showCopilotPrompt, setShowCopilotPrompt] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiResponse, setAiResponse] = useState("");
 
   const handleCopilotSelect = () => {
     setShowCopilotPrompt(true);
+  };
+
+  const handleGenerate = async () => {
+    if (!prompt.trim()) {
+      toast({
+        title: "Please enter a prompt",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    setAiResponse("");
+
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-solution', {
+        body: { prompt }
+      });
+
+      if (error) throw error;
+
+      setAiResponse(data.solution);
+      toast({
+        title: "Solution generated",
+        description: "AI has generated a solution for your task",
+      });
+    } catch (error) {
+      console.error('Error generating solution:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate solution. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const copilotIcon = (
@@ -84,19 +128,32 @@ const SelectSolution = () => {
                 </p>
 
                 <div className="mb-6">
-                  <label className="text-foreground font-heading text-lg mb-3 block">Prompt to Microsoft Copilot</label>
-                  <textarea
-                    className="w-full h-32 bg-secondary border border-border rounded-lg p-4 text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+                  <label className="text-foreground font-heading text-lg mb-3 block">Prompt to AI Assistant</label>
+                  <Textarea
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    className="w-full min-h-[128px] resize-none"
                     placeholder="I have uploaded 15,000 documents as attachments, please..."
-                    defaultValue="I have uploaded 15,000 documents as attachments, please..."
+                    disabled={isGenerating}
                   />
                 </div>
 
-                <button className="w-12 h-12 bg-foreground text-background rounded-lg hover:bg-muted-foreground transition-colors flex items-center justify-center">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
+                {aiResponse && (
+                  <div className="bg-secondary border border-border rounded-lg p-6 mb-6">
+                    <h4 className="text-lg font-heading font-normal text-foreground mb-3">AI Solution:</h4>
+                    <div className="text-foreground whitespace-pre-wrap leading-relaxed">
+                      {aiResponse}
+                    </div>
+                  </div>
+                )}
+
+                <Button
+                  onClick={handleGenerate}
+                  disabled={isGenerating}
+                  className="bg-foreground text-background hover:bg-muted-foreground"
+                >
+                  {isGenerating ? "Generating..." : "Generate"}
+                </Button>
               </div>
 
               <div className="space-y-6">
